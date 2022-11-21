@@ -4,6 +4,6 @@
 
 ### ToDo
 
-- [] .py to .js
-- [] stats (users in server)
-- [] leaderboard (fetch all messages per interval and declare top 1,2,3...)
+- [ ] .py to .js
+- [ ] stats (users in server)
+- [ ] leaderboard (fetch all messages per interval and declare top 1,2,3...)
