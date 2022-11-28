@@ -1,44 +1,67 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const Sequelize = require("sequelize");
-const dotenv = require('dotenv');
-dotenv.config();
-// Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits, Partials, Collection } = require("discord.js");
+const { Client, Partials, Collection, GatewayIntentBits } = require('discord.js');
+const config = require('./config/config');
+const colors = require("colors");
 
-// Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessageTyping, GatewayIntentBits.DirectMessages, GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.DirectMessageTyping, GatewayIntentBits.MessageContent], shards: "auto", partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User, Partials.ThreadMember] });
+// Creating a new client:
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.MessageContent
+  ],
+  partials: [
+    Partials.Channel,
+    Partials.Message,
+    Partials.User,
+    Partials.GuildMember,
+    Partials.Reaction
+  ],
+  presence: {
+    activities: [{
+      name: "T.F.A is cool!",
+      type: 0
+    }],
+    status: 'dnd'
+  }
+});
 
-// Commands folder handler
-client.commands = new Collection();
+// Host the bot:
+require('http').createServer((req, res) => res.end('Ready.')).listen(3000);
 
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+// Getting the bot token:
+const AuthenticationToken = process.env.TOKEN || config.Client.TOKEN;
+if (!AuthenticationToken) {
+  console.warn("[CRASH] Authentication Token for Discord bot is required! Use Envrionment Secrets or config.js.".red)
+  return process.exit();
+};
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    // Set a new item in the commands Collection with the key as the command name and the value as the exported module
-    if ('data' in command && 'execute' in command) {
-        client.commands.set(command.data.name, command);
-    } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-    }
-}
+// Handler:
+client.prefix_commands = new Collection();
+client.slash_commands = new Collection();
+client.user_commands = new Collection();
+client.message_commands = new Collection();
+client.modals = new Collection();
+client.events = new Collection();
 
-// Events folder handler
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+module.exports = client;
 
-for (const file of eventFiles) {
-    const filePath = path.join(eventsPath, file);
-    const event = require(filePath);
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
-    } else {
-        client.on(event.name, (...args) => event.execute(...args));
-    }
-}
+["prefix", "application_commands", "modals", "events", "mongoose"].forEach((file) => {
+  require(`./handlers/${file}`)(client, config);
+});
 
-// Login to Discord with your client's token
-client.login(process.env.token);
+// Login to the bot:
+client.login(AuthenticationToken)
+  .catch((err) => {
+    console.error("[CRASH] Something went wrong while connecting to your bot...");
+    console.error("[CRASH] Error from Discord API:" + err);
+    return process.exit();
+  });
+
+// Handle errors:
+process.on('unhandledRejection', async (err, promise) => {
+  console.error(`[ANTI-CRASH] Unhandled Rejection: ${err}`.red);
+  console.error(promise);
+});

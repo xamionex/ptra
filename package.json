@@ -1,25 +1,33 @@
 {
-  "name": "ptra",
-  "version": "1.0.0",
-  "description": "Petar's custom discord bot",
+  "name": "discordjs-v14-bot-template",
+  "version": "14.0.0",
+  "description": "A Discord Bot template built by T.F.A#7524!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "T.F.A#7524",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^7.6.2",
+    "colors": "^1.4.0",
+    "discord-api-types": "^0.36.2",
+    "discord.js": "^14.5.0",
+    "moment": "^2.29.4",
+    "mongoose": "^6.4.4",
+    "ms": "^2.1.3",
+    "node-fetch": "^2.6.7",
+    "pretty-ms": "^6.0.1",
+    "quick.db": "^9.0.5",
+    "super-djs": "^1.7.4"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xamionex/ptra.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/xamionex/ptra/issues"
   },
-  "homepage": "https://github.com/xamionex/ptra#readme",
-  "dependencies": {
-    "discord.js": "^14.6.0",
-    "dotenv": "^16.0.3",
-    "sequelize": "^6.25.7",
-    "sqlite3": "^5.1.2"
-  }
+  "homepage": "https://github.com/xamionex/ptra#readme"
 }
