@@ -1,4 +1,4 @@
-const { EmbedBuilder, codeBlock } = require("discord.js"); 
+const { EmbedBuilder, codeBlock } = require("discord.js");
 
 module.exports = {
   config: {
@@ -41,6 +41,6 @@ module.exports = {
           .setColor("Blue")
       ]
     });
-    
+
   },
 };

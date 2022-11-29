@@ -21,7 +21,7 @@ const client = new Client({
   ],
   presence: {
     activities: [{
-      name: "T.F.A is cool!",
+      name: "PTRA Gaming",
       type: 0
     }],
     status: 'dnd'
@@ -48,7 +48,7 @@ client.events = new Collection();
 
 module.exports = client;
 
-["prefix", "application_commands", "modals", "events", "mongoose"].forEach((file) => {
+["prefix", "application_commands", "modals", "events", "mongoose", "watcher"].forEach((file) => {
   require(`./handlers/${file}`)(client, config);
 });
 
@@ -56,7 +56,7 @@ module.exports = client;
 client.login(AuthenticationToken)
   .catch((err) => {
     console.error("[CRASH] Something went wrong while connecting to your bot...");
-    console.error("[CRASH] Error from Discord API:" + err);
+    console.error("[CRASH] Error from Discord API: " + err);
     return process.exit();
   });
 

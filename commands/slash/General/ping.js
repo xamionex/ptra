@@ -12,8 +12,8 @@ module.exports = {
         return interaction.reply({
             embeds: [
                 new EmbedBuilder()
-                    .setDescription(client.ws.ping + "ms!")
-                    .setColor('Blue')
+                    .setDescription(`🏓 **Pong!** Client websocket ping: \`${client.ws.ping}\` ms.`)
+                    .setColor("Green")
             ],
             ephemeral: true
         })
